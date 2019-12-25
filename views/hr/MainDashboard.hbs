@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Dashboard</title>
+
+</head>
+
+<style>
+  body {
+    overflow-x: hidden;
+  }
+
+  #sidebar-wrapper {
+    min-height: 100vh;
+    margin-left: -15rem;
+    -webkit-transition: margin .25s ease-out;
+    -moz-transition: margin .25s ease-out;
+    -o-transition: margin .25s ease-out;
+    transition: margin .25s ease-out;
+  }
+
+  #sidebar-wrapper .sidebar-heading {
+    padding: 0.875rem 1.25rem;
+    font-size: 1.2rem;
+  }
+
+  #sidebar-wrapper .list-group {
+    width: 15rem;
+  }
+
+  #page-content-wrapper {
+    min-width: 100vw;
+  }
+
+  #wrapper.toggled #sidebar-wrapper {
+    margin-left: 0;
+  }
+
+  @media (min-width: 768px) {
+    #sidebar-wrapper {
+      margin-left: 0;
+    }
+
+    #page-content-wrapper {
+      min-width: 0;
+      width: 100%;
+    }
+
+    #wrapper.toggled #sidebar-wrapper {
+      margin-left: -15rem;
+    }
+  }
+</style>
+
+
+
+<body>
+
+  <div class="d-flex" id="wrapper">
+
+    <!-- Sidebar -->
+    <div class="bg-light border-right" id="sidebar-wrapper">
+      <div class="sidebar-heading">HR Dashboard</div>
+      <div class="list-group list-group-flush">
+          <a href="/hr/ListApplicants" id="ListApp" class="list-group-item list-group-item-action bg-light">List Applicants</a>
+          <a href="/hr/hrDashboard/candidatesProgress" class="list-group-item list-group-item-action bg-light">Candidates Progress</a>
+          <a href="/hr/hrDashboard/listExams" class="list-group-item list-group-item-action bg-light mangeExam">Manage Exams</a>
+          <a href="/hr/createPositionForm" class="list-group-item list-group-item-action bg-light">Manage Positions</a>
+
+      </div>
+    </div>
+    <!-- /#sidebar-wrapper -->
+
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+
+      <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+        <button class="btn btn-primary" id="menu-toggle">Menu</button>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+            <li class="nav-item active">
+              <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Log out</a>
+            </li>
+            <li>
+
+                <div class="dropdown">
+                    <input type="text" class="searchValue">
+                    <button onclick="myFunction()" class="dropbtn">Search</button>
+                    <div id="myDropdown" class="dropdown-content searching">
+                        <a href="#">StudentEmail</a>
+                        <a href="#">StudentName</a>
+                        <a href="#">ExamTitle</a>
+                        <a href="#">ExamDuration</a>
+                        <a href="#">ExamQuestion</a>
+                    </div>
+                </div>
+
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <div class="container-fluid body_t">
+          
+      </div>
+
+    </div>
+    <!-- /#page-content-wrapper -->
+      <div class="modal fade" id="my_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+                  <div class="modal-body">
+                      <p class="desc"></p>
+                      <input name="stId" type="text" value="" id ="stId"/>
+                  </div>
+                  <div class="modal-footer">
+                      <button type="button" id="refuseBtn" class="btn btn-danger" data-dismiss="modal">Refuse</button>
+                      <button type="button" id="acceptBtn" class="btn btn-success" data-dismiss="modal">Accept</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <!-- /#wrapper -->
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <!-- Menu Toggle Script -->
+</body>
+<div class="moda"></div>
+</html>
+<!--
+Insert Exam
+-->
+<div class="modal fade" id="insertExam" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">insert Exam</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">exam Title:</label>
+                        <input type="text" class="form-control examTitle" id="recipient-name">
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Duration:</label>
+                        <input type="text" class="form-control examDuration" id="recipient-name">
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary addExam">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 
+Insert Question
+-->
+<div class="modal fade" id="insertQuestion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">insert Question</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">Exam Id:</label>
+            <input type="text" class="form-control examID" id="recipient-name">
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">Question:</label>
+            <input type="text" class="form-control QuestionBody" id="recipient-name">
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="col-form-label">Answer:</label>
+            <textarea class="form-control AnswerBody" id="message-text"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="col-form-label">Correct:</label>
+            <input type="checkbox" class="form-control Correct" id="recipient-name">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary addQuestion">save</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+<!--
+Delete and Update Exam
+-->
+<div class="modal fade" id="DandU" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Update Exam</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">QuixID:</label>
+            <input type="text" class="form-control DU_examID" id="recipient-name">
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="col-form-label">Exam Title:</label>
+            <textarea class="form-control DU_ExamTitle" id="message-text"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">Exam Duration:</label>
+            <input type="text" class="form-control DU_ExamDuration" id="recipient-name">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary Delete_Exam">Delete</button>
+        <button type="button" class="btn btn-primary Update_Exam">Update</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--
+Delete and Update question
+-->
+<div class="modal fade" id="DandUQuestion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Update and Delete Question</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">QuizID:</label>
+            <input type="text" class="form-control QexamID" id="recipient-name">
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="col-form-label">old Question:</label>
+            <textarea class="form-control  oldQuestionID" id="message-text"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">new Question:</label>
+            <input type="text" class="form-control newQuestion" id="recipient-name">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary DeleteQuestion">Delete</button>
+        <button type="button" class="btn btn-primary UpdateQuestion">Update</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="insertAnswer" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">insert Answer</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">question Id:</label>
+            <input type="text" class="form-control questionIDAnswer" id="recipient-name">
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">Answer:</label>
+            <input type="text" class="form-control AnswerBodyCreate" id="recipient-name">
+          </div>
+
+          <div class="form-group">
+            <label for="message-text" class="col-form-label">Correct:</label>
+            <input type="checkbox" class="form-control CorrectAnswer" id="recipient-name">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary addAnswer">save</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="DandUAnswer" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Update and Delete Answer</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">Answer ID:</label>
+            <input type="text" class="form-control AnswerIDUD" id="recipient-name">
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="col-form-label">Answer Body:</label>
+            <textarea class="form-control  AnswerBodyUD" id="message-text"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">correct:</label>
+            <input type="checkbox" class="form-control correctUD" id="recipient-name">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary DeleteAnswer">Delete</button>
+        <button type="button" class="btn btn-primary UpdateAnswer">Update</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+    var modaHead = '<div class="modal-dialog" role="document">'
+    modaHead += '<div class="modal-content">';
+    modaHead += '<div class="modal-header">'
+
+
+    var modaAfterTitle = '<button type="button" class="close" data-dismiss="modal" aria-label="Close">'
+    modaAfterTitle += '<span aria-hidden="true">&times;</span>'
+    modaAfterTitle += '</button>'
+    modaAfterTitle += '</div>'
+    modaAfterTitle += '<div class="modal-body">'
+
+    var modaAfterBody = '</div>'
+    modaAfterBody += '<div class="modal-footer">'
+
+    var afterFoter = '</div></div></div></div>'
+
+    $(document).on('click', '.addExam', function () {
+        if (isNaN($(".examDuration").val()) || $(".examTitle").val().length == 0 || $(".examDuration").val().length == 0) {
+            alert("Wrong in input requirments :(");
+        }
+        else {
+            $.post("/hr/hrDashboard/insertExam",
+                    {
+                        ExamTitle: $(".examTitle").val(),
+                        ExamDuration: $(".examDuration").val()
+                    },
+                    function (data, status) {
+
+                        if (data == '1') {
+                            location.reload();
+                        }
+                        else
+                            alert("Error happened in query")
+                    })
+
+        }
+    });
+
+    $(document).on('click', '.Delete_Exam', function () {
+        if (isNaN($(".DU_examID").val()) || $(".DU_examID").val().length == 0) {
+            alert("Wrong in input requirments :(");
+        }
+        else {
+            $.post("/hr/hrDashboard/deleteExam",
+                    {
+                        ID: $(".DU_examID").val()
+                    },
+                    function (data, status) {
+                        if (data == '1')
+                            location.reload();
+                        else
+                            alert("Error happened in query")
+                    })
+
+        }
+    });
+
+    $(document).on('click', '.Update_Exam', function () {
+        if (isNaN($(".DU_examID").val()) || isNaN($(".DU_quizDuration").val()) || $(".DU_examID").val().length == 0 || $(".DU_ExamTitle").val().length == 0 || $(".DU_ExamDuration").val().length == 0) {
+            alert("Wrong in input requirments :(");
+        }
+        else {
+            $.post("/hr/hrDashboard/updateExam",
+                    {
+                        ID: $(".DU_examID").val(),
+                        Examtitle: $(".DU_ExamTitle").val(),
+                        ExamDuration: $(".DU_ExamDuration").val()
+                    },
+                    function (data, status) {
+                        if (data == '1')
+                            location.reload();
+                        else
+                            alert("Error happened in query")
+                    })
+
+        }
+    });
+
+    $(document).on('click', '.addQuestion', function () {
+        if (isNaN($(".examID").val()) || $(".examID").val().length == 0 || $(".QuestionBody").val().length == 0 || $(".AnswerBody").val().length == 0) {
+            alert("Wrong in input requirments :(");
+        }
+        else {
+            $.post("/hr/hrDashboard/insertQuestion",
+                    {
+                        Correct: $(".Correct").is(":checked"),
+                        examID: $(".examID").val(),
+                        QuestionBody: $(".QuestionBody").val(),
+                        AnswerBody: $(".AnswerBody").val()
+                    },
+                    function (data, status) {
+
+                        if (data == '1')
+                            $('.addQuestion').hide()
+                        else
+                            alert("Error happened in query")
+                    })
+
+        }
+    })
+
+    $(document).on('click', '.UpdateQuestion', function () {
+        if (isNaN($(".QexamID").val()) || $(".QexamID").val().length == 0 || $(".oldQuestionID").val().length == 0 || $(".newQuestion").val().length == 0) {
+            alert("Wrong in input requirments :(");
+        }
+        else {
+            $.post("/hr/hrDashboard/updateQuestion",
+                    {
+                        ID: $(".QexamID").val(),
+                        oldQuestionID: $(".oldQuestionID").val(),
+                        newQuestion: $(".newQuestion").val()
+                    },
+                    function (data, status) {
+                        if (data == '1')
+                            $(".UpdateQuestion").hide();
+                        else
+                            alert("Error happened in query")
+                    })
+        }
+    })
+
+    $(document).on('click', '.DeleteQuestion', function () {
+        if (isNaN($(".QexamID").val()) || $(".QexamID").val().length == 0) {
+            alert("Wrong in input requirments :(");
+        }
+        else {
+            $.post("/hr/hrDashboard/deleteQuestion",
+                    {
+
+                        oldQuestionID: $(".oldQuestionID").val(),
+
+                    },
+                    function (data, status) {
+                        if (data == '1')
+                            $(".DeleteQuestion").hide();
+                        else
+                            alert("Error happened in query")
+                    })
+        }
+    })
+
+    $(document).on('click', '.addAnswer', function () {
+        if (isNaN($(".questionIDAnswer").val()) || $(".questionIDAnswer").val().length == 0 || $(".AnswerBodyCreate").val().length == 0) {
+            alert("Wrong in input requirments :(");
+        }
+        else {
+            $.post("/hr/hrDashboard/insertAnswer",
+                    {
+                        Correct: $('.CorrectAnswer').is(":checked"),
+                        questionID: $(".questionIDAnswer").val(),
+                        AnswerBody: $(".AnswerBodyCreate").val()
+                    },
+                    function (data, status) {
+                        if (data == '1')
+                            $('.addAnswer').hide()
+                        else
+                            alert("Error happened in query")
+                    })
+
+        }
+    })
+
+    $(document).on('click', '.UpdateAnswer', function () {
+        if (isNaN($(".AnswerIDUD").val()) || $(".AnswerIDUD").val().length == 0 || $(".AnswerBodyUD").val().length == 0 ) {
+            alert("Wrong in input requirments :(");
+        }
+        else {
+            $.post("/hr/hrDashboard/updateAnswer",
+                    {
+                        ID: $(".AnswerIDUD").val(),
+                        AnswerBody: $(".AnswerBodyUD").val(),
+                        correct: $(".correctUD").is(":checked")
+                    },
+                    function (data, status) {
+                        if (data == '1')
+                            $(".UpdateAnswer").hide();
+                        else
+                            alert("Error happened in query")
+                    })
+        }
+    })
+    $(document).on('click', '.DeleteAnswer', function () {
+        if (isNaN($(".AnswerIDUD").val()) || $(".AnswerIDUD").val().length == 0) {
+            alert("Wrong in input requirments :(");
+        }
+        else {
+            $.post("/hr/hrDashboard/deleteAnswer",
+                    {
+                        ID: $(".AnswerIDUD").val(),
+                    },
+                    function (data, status) {
+                        if (data == '1')
+                            $(".DeleteAnswer").hide();
+                        else
+                            alert("Error happened in query")
+                    })
+        }
+    })
+
+    $(document).on('click', '.exams_details', function () {
+        var arr = '<div class="modal fade " id="editexam" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">';
+        var y = $(this).val();
+        arr += modaHead;
+        arr += '<h5 class="modal-title" id="exampleModalLabel">' + $(this).text() + '</h5>'
+        arr += modaAfterTitle
+        $.post("/hr/hrDashboard/examDetails",
+                {
+                    id: $(this).val()
+                },
+                function (data, status) {
+                    arr += '<table class="table table-dark"><thead><tr><th scope="col">Question Body</th><th scope="col">Answer Body</th><th scope="col">Correct</th></tr>  </thead><tbody>'
+                    data.forEach((item) => {
+                        //arr += '<tr><th scope="row">'+'<input type=text value=' + item.questionBody + '></th><td>' +'<input type=text value=' + item["AnswerBody"] + '></td><td>' +'<input type=text value=' + item.correct + '></td></tr>'
+                        arr += '<tr><th scope="row">' + item.questionBody + '</th><td>' + item["AnswerBody"] + '</td><td>' + item.correct + '</td></tr>'
+                    })
+                    arr += '</tbody></table>'
+                    arr += modaAfterBody;
+                    arr += '<button type="button" class="btn btn-secondary" >Close</button>'
+                    arr += afterFoter;
+                    $('.moda').html(arr);
+                });
+    });
+
+    $(document).ready(() => {
+        $('.examlist').click(() => {
+            $.get("/hr/hrDashboard/listExams", (data) => {
+                var arr = ''
+                arr += "<table class='table'><thead class='thead-dark'><tr> <th scope='col'>ID</th><th scope='col'>Title</th> <th scope='col'>Duration</th> </tr> </thead> <tbody>"
+                data.forEach(function (item) {
+                    arr += ('<tr><th scope="row">' + item.examID + '</th><td>' + item["examTitle"] + '</td><td>' + item.Duration + '</td></tr>')
+                });
+                arr += "</tbody> </table>"
+                $('.body_t').html(arr)
+            })
+        })
+        $('.mangeExam').click(() => {
+            $.get("/hr/hrDashboard/listExams", (data) => {
+                var arr = '';
+                arr += "<table class='table'><thead class='thead-dark'><tr> <th scope='col'>ID</th><th scope='col'>Title</th> <th scope='col'>Duration</th> </tr> </thead> <tbody>"
+
+                data.forEach(function (item) {
+                    // arr += '<button type="button" class="btn btn-primary exams_editExam" data-toggle="modal" data-target="#editexam"value=' + item.examID + '>' + item.examTitle + '</button><br>'
+                    arr += ('<tr><th scope="row">' + item.examID + '</th><td>' + '<button type="button" class="btn btn-link exams_details" data-toggle="modal" data-target="#editexam"value=' + item.examID + '>' + item.examTitle + '</button>' + '</td><td>' + item.Duration + '</td></tr>')
+                })
+                arr += '<button type="button" class="btn btn-primary insertExam" data-toggle="modal" data-target="#insertExam">Insert Exam</button>'
+                arr += '<button type="button" style="margin-left: 10px;"class="btn btn-primary " data-toggle="modal" data-target="#insertQuestion">Insert Question</button>'
+                arr += '<button type="button" style="margin-left: 10px;"class="btn btn-primary " data-toggle="modal" data-target="#insertAnswer">Insert Answer</button>'
+                arr += '<button type="button" style="margin-left: 10px;" class="btn btn-primary" data-toggle="modal" data-target="#DandU" >Delete and Update Exam</button>'
+                arr += '<button type="button" style="margin-left: 10px;" class="btn btn-primary" data-toggle="modal" data-target="#DandUQuestion" >Delete and Update question</button>'
+                arr += '<button type="button" style="margin-left: 10px;" class="btn btn-primary" data-toggle="modal" data-target="#DandUAnswer" >Delete and Update Answer</button>'
+
+                $('.body_t').html(arr);
+            })
+        })
+    })
+
+</script>
+
+<!----------------------------------------------------------------------------------------------->
+
+<script>
+
+    $(document).ready(() => {
+
+        $('.searchResult').hide();
+        $('.searching a').click(function () {
+
+
+            var url = '/hr/search' + $(this).text()
+            $.get(url, { searchQuery: $('.searchValue').val() }, (data) => {
+                if (data.length == 0)
+                    alert('not found');
+                else {
+                    $('.searchResult').trigger('click');
+                    var arr = '<ul class="list-group">';
+                    for (var i = 0; i < data.length; i++) {
+                        $.each(data[i], function (key, value) {
+                            arr+='<li class="list-group-item">'+key + ": " + value+"</li>";
+                        });
+                    }
+                    arr+='</li>'
+                    $('.modal-title').text($(this).text());
+                    $('.modal-body').html(arr);
+                }
+            })
+        });
+    })
+    /* When the user clicks on the button,
+toggle between hiding and showing the dropdown content */
+    function myFunction() {
+        document.getElementById("myDropdown").classList.toggle("show");
+    }
+    window.onclick = function (event) {
+        if (!event.target.matches('.dropbtn')) {
+            var dropdowns = document.getElementsByClassName("dropdown-content");
+            var i;
+            for (i = 0; i < dropdowns.length; i++) {
+                var openDropdown = dropdowns[i];
+                if (openDropdown.classList.contains('show')) {
+                    openDropdown.classList.remove('show');
+                }
+            }
+        }
+    }
+</script>
+
+
+
+
+<style>
+    /* Dropdown Button */
+    .dropbtn {
+        background-color: #3498DB;
+        color: white;
+        padding: 16px;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+    }
+
+    /* Dropdown button on hover & focus */
+    .dropbtn:hover,
+    .dropbtn:focus {
+        background-color: #2980B9;
+    }
+
+    /* The container <div> - needed to position the dropdown content */
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    /* Dropdown Content (Hidden by Default) */
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f1f1f1;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+    }
+
+    /* Links inside the dropdown */
+    .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+    }
+
+    /* Change color of dropdown links on hover */
+    .dropdown-content a:hover {
+        background-color: #ddd
+    }
+
+    /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+    .show {
+        display: block;
+    }
+</style>
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary searchResult" data-toggle="modal" data-target="#sResult">
+
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="sResult" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalScrollableTitle">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>

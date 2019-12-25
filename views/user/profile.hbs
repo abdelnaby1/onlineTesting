@@ -1,0 +1,256 @@
+
+<body>
+<ul class="nav justify-content-center pt-md-2">
+    <li class="nav-item">
+        <a class="nav-link active" href="#">profile</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="#">Exams</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="#">Jobs</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"> hello Mr.{{username}}</a>
+    </li>
+    <li class="nav-item">
+        <!--A CIRCLE LIKE BUTTON TO DISPLAY NOTIFICATION DROPDOWN.-->
+        <div id="noti_Button"></div>
+
+        <!--THE NOTIFICAIONS DROPDOWN BOX.-->
+        <div id="notifications">
+            <h3>Notifications</h3>
+            <div style="height:480px;" id="notficationList"></div>
+            <div class="seeAll"><a href="#">See All</a></div>
+        </div>
+    </li>
+</ul>
+<hr>
+<div class="container">
+    <div class="row pt-4 ">
+        {{#positions}}
+            <div class="card text-center col-6">
+                <div class="card-header">
+                    Opened
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{this.title}}</h5>
+                    <p class="card-text">{{this.description}}"</p>
+                    <a href="#my_modal" id="btn{{this.pid}}" class = "btn btn-primary" data-toggle="modal"
+                       data-title="{{this.title}}"
+                       data-pos-id="{{this.pid}}" data-book-id="{{this.description}}">Apply</a>
+                </div>
+                <div class="card-footer text-muted">
+                    2 days ago
+                </div>
+            </div>
+        {{/positions}}
+    </div>
+</div><!-- Modal -->
+<div class="modal fade" id="my_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Apply</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <!-- Modal -->
+            <form action="/fileupload"  method="post" enctype="multipart/form-data" id="myform">
+                <div class="modal-body">
+                    <p class="desc"></p>
+                    <!--                    <input value =""  type="text" name="title" >-->
+                    <!--                    <input value =""  type="text" name="posId" >-->
+                    <div class="input-group mb-3">
+                        <input type="text" hidden  name="title" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="text"  hidden name="posId" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                    </div>
+                    <div class="custom-file">
+                        <label class="custom-file-label" for="file">Choose your CV</label>
+                        <input type="file" class="custom-file-input CV" id="file" name="filetoupload"/><br>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" >Upload</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    jQuery(document).ready(function(){
+        jQuery('#my_modal').on('show.bs.modal', function(e) {
+            var bookId = jQuery(e.relatedTarget).data('book-id');
+            var posId = jQuery(e.relatedTarget).data('pos-id');
+            var title = jQuery(e.relatedTarget).data('title');
+            jQuery(e.currentTarget).find('.desc').append(bookId);
+            jQuery(e.currentTarget).find('input[name=posId]').val(posId);
+            jQuery(e.currentTarget).find('input[name=title]').val(title);
+        });
+    });
+</script>
+
+
+    <style>
+        #noti_Container {
+            position: relative;
+        }
+
+        /* A CIRCLE LIKE BUTTON IN THE TOP MENU. */
+        #noti_Button {
+            width: 22px;
+            height: 22px;
+            line-height: 22px;
+            border-radius: 50%;
+            -moz-border-radius: 50%;
+            -webkit-border-radius: 50%;
+            background: blue;
+            margin: -3px 10px 0 10px;
+            cursor: pointer;
+        }
+
+        /* THE POPULAR RED NOTIFICATIONS COUNTER. */
+        #noti_Counter {
+            display: block;
+            position: absolute;
+            background: #E1141E;
+            color: #FFF;
+            font-size: 12px;
+            font-weight: normal;
+            padding: 1px 3px;
+            margin: -8px 0 0 25px;
+            border-radius: 2px;
+            -moz-border-radius: 2px;
+            -webkit-border-radius: 2px;
+            z-index: 1;
+        }
+
+        /* THE NOTIFICAIONS WINDOW. THIS REMAINS HIDDEN WHEN THE PAGE LOADS. */
+        #notifications {
+            display: none;
+            width: 430px;
+            position: absolute;
+            top: 50px;
+            left: 840px;
+            background:white;
+            border: solid 1px rgba(100, 100, 100, .20);
+            -webkit-box-shadow: 0 3px 8px rgba(0, 0, 0, .20);
+            z-index: 10;
+        }
+
+        /* AN ARROW LIKE STRUCTURE JUST OVER THE NOTIFICATIONS WINDOW */
+        #notifications:before {
+            content: '';
+            display: block;
+            width: 0;
+            height: 0;
+            color: transparent;
+            border: 10px solid black;
+            border-color: transparent transparent white;
+            margin-top: -20px;
+            margin-left: 10px;
+        }
+
+
+
+        .seeAll {
+            background: #F6F7F8;
+            padding: 8px;
+            font-size: 12px;
+            font-weight: bold;
+            border-top: solid 1px rgba(100, 100, 100, .30);
+            text-align: center;
+        }
+
+        .BodyNotify {
+            background: #F6F7F8;
+            padding: 8px;
+            font-size: 12px;
+            font-weight: bold;
+            border-top: solid 1px rgba(100, 100, 100, .30);
+            text-align: left;
+        }
+
+        .seeAll a {
+            color: #3b5998;
+        }
+
+        .seeAll a:hover {
+            background: #F6F7F8;
+            color: #3b5998;
+            text-decoration: underline;
+        }
+    </style>
+
+
+    <script>
+
+        $("#notifications").on("click", "a", function () {
+            $.get('/notifcationDetails', { 'id': $(this).attr('id') }, (data) => {
+                alert(data[0].body)
+            })
+        });
+        $(document).ready(function () {
+            // ANIMATEDLY DISPLAY THE NOTIFICATION COUNTER.
+            $('#noti_Counter')
+                .css({ opacity: 0 })
+                .text('5')  // ADD DYNAMIC VALUE (YOU CAN EXTRACT DATA FROM DATABASE OR XML).
+                .css({ top: '-10px' })
+                .animate({ top: '-2px', opacity: 1 }, 500);
+
+            $('#noti_Button').click(function () {
+
+                // TOGGLE (SHOW OR HIDE) NOTIFICATION WINDOW.
+                $('#notifications').fadeToggle('fast', 'linear', function () {
+                    if ($('#notifications').is(':hidden')) {
+                        $('#noti_Button').css('background-color', '#2E467C');
+
+                    }
+                    // CHANGE BACKGROUND COLOR OF THE BUTTON.
+                    else {
+
+
+                        $.get('/notifcation', (data, status) => {
+                            for (var i = 0; i < data.length; i++) {
+                                var ht = '';
+
+                                ht += '<div class="BodyNotify" style="height:60px; height: 8%;">'
+                                ht += '<a style="font-weight: bold;font-size: 14px;" id="' + data[i].notfiID + '">' + data[i].title + ' </a>';
+                                ht += '<a style="font-weight: bold;font-size: 12px;"id="' + data[i].notfiID + '">send to you from - ' + data[i].from + ':</a>'
+                                ht += ' <a style="font-weight: bold;font-size: xx-small;"id="' + data[i].notfiID + '">' + data[i].body + '</a></div>';
+
+                            }
+                            $('#notficationList').html(ht);
+                        })
+                    }
+                });
+
+
+                return false;
+            });
+
+            // HIDE NOTIFICATIONS WHEN CLICKED ANYWHERE ON THE PAGE.
+            $(document).click(function () {
+                $('#notifications').hide();
+
+
+            });
+
+            $('#notifications').click(function () {
+                return false;       // DO NOTHING WHEN CONTAINER IS CLICKED.
+            });
+        });
+    </script>
+
+</body>
+
+
+{{!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script> --}}

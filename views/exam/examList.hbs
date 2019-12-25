@@ -1,0 +1,56 @@
+<div class="container-fluid">
+    <h1 class="mt-4">List of All Exams</h1>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Exam Title</th>
+            <th scope="col">Link</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{# Process}}
+            {{#if this.isFinished}}
+                <tr hidden disabled>
+                    <td>{{this.examId}}</td>
+                    <td>
+                        <a href="/startExam/{{this.user_name}}/{{this.process_id}}/{{this.examId}}"  id="btn" class="btn btn-primary" >Open</a>
+                    </td>
+                </tr>
+            {{else}}
+                <tr>
+                    <td>{{this.examId}}</td>
+                    <td>
+                        <a href="/startExam/{{this.user_name}}/{{this.process_id}}/{{this.examId}}"  id="btn_{{this.preference}}_{{this.process_id}}" class="btn btn-primary" >Open</a>
+                    </td>
+                </tr>
+            {{/if}}
+        {{break}}
+        {{/Process}}
+        </tbody>
+    </table>
+
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+    $('a').bind('click', function(e) {
+        e.preventDefault();
+
+        var temp = $(this).attr('id').split("_");
+        var  pref = temp[1];
+        var processId = temp[2];
+
+        $.getJSON("/checkForAvailability/"+processId+"/"+pref , (data)=>{
+            if(data.length > 0){
+                $(this).off("click").attr('href', "javascript: void(0);");
+                $(this).addClass("disabled");
+                alert("Please Finish The Previous Exams Firstly")
+            }
+            else {
+                var url =  $(this).attr('href');
+                var myWindow = window.open(url, "_self", "width=1200, height=600,scrollbars=yes,status=yes,location = yes");
+            }
+        })
+
+        //add .off() if you don't want to trigger any event associated with this link
+    });
+</script>

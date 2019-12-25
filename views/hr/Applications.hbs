@@ -1,0 +1,269 @@
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Dashboard</title>
+
+</head>
+
+<style>
+    body {
+        overflow-x: hidden;
+    }
+
+    #sidebar-wrapper {
+        min-height: 100vh;
+        margin-left: -15rem;
+        -webkit-transition: margin .25s ease-out;
+        -moz-transition: margin .25s ease-out;
+        -o-transition: margin .25s ease-out;
+        transition: margin .25s ease-out;
+    }
+
+    #sidebar-wrapper .sidebar-heading {
+        padding: 0.875rem 1.25rem;
+        font-size: 1.2rem;
+    }
+
+    #sidebar-wrapper .list-group {
+        width: 15rem;
+    }
+
+    #page-content-wrapper {
+        min-width: 100vw;
+    }
+
+    #wrapper.toggled #sidebar-wrapper {
+        margin-left: 0;
+    }
+
+    @media (min-width: 768px) {
+        #sidebar-wrapper {
+            margin-left: 0;
+        }
+
+        #page-content-wrapper {
+            min-width: 0;
+            width: 100%;
+        }
+
+        #wrapper.toggled #sidebar-wrapper {
+            margin-left: -15rem;
+        }
+    }
+</style>
+
+
+
+<body>
+
+<div class="d-flex" id="wrapper">
+
+    <!-- Sidebar -->
+    <div class="bg-light border-right" id="sidebar-wrapper">
+        <div class="sidebar-heading">HR Dashboard</div>
+        <div class="list-group list-group-flush">
+            <a href="/hr/ListApplicants" id="ListApp" class="list-group-item list-group-item-action bg-light">List Applicants</a>
+            <a href="/hr/hrDashboard/candidatesProgress" class="list-group-item list-group-item-action bg-light">Candidates Progress</a>
+            <a href="/hr/hrDashboard/listExams" class="list-group-item list-group-item-action bg-light mangeExam">Manage Exams</a>
+            <a href="/hr/createPositionForm" class="list-group-item list-group-item-action bg-light">Manage Positions</a>
+        </div>
+    </div>
+    <!-- /#sidebar-wrapper -->
+
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+            <button class="btn btn-primary" id="menu-toggle">Menu</button>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Log out</a>
+                    </li>
+
+                </ul>
+            </div>
+        </nav>
+        <div class="container-fluid">
+            <h1 class="mt-4">List of All applicants</h1>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                         <th scope="col">Student</th>
+                         <th scope="col">Position</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {{# results}}
+                <tr>
+                    <td>{{this.user_name}}</td>
+                    <td>{{this.title}}</td>
+                    <td>
+                        <a href=".bd-example-modal-xl"  id="{{this.user_name}}--{{this.CV}}--{{this.pid}}" class="btn btn-primary dd " data-toggle="modal" data-book-id="{{this.id}}">Preview</a>
+                    </td>
+                </tr>
+                {{/results}}
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+    <!-- /#page-content-wrapper -->
+    <div class="modal fade bd-example-modal-xl" id="my_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p class="desc"></p>
+                    <embed id = "CV" src="" width="1080" height="400">
+                    <input name="stId" type="text" hidden value="" id ="stId"/>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="refuseBtn" class="btn btn-danger" data-dismiss="modal">Refuse</button>
+                    <button type="button" class="btn btn-success" data-dismiss="modal"
+                            data-toggle="modal" id="approve" data-target="#my_modal2">Accept</button>
+<!--                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="my_modal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        <form action="/hr/approval" method="post">
+            <div class="modal-body">
+                <div class="input-group mb-3">
+                    <input type="text" id="exam_list" name="exam_list" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                </div>
+                <div class="input-group mb-3">
+                    <input type="text" hidden id="exam_listIds" name="exam_listIds" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                </div>
+                <div class="my-1 input-group mb-3">
+                    <select class="custom-select" id="select1" name="exams">
+                        <option selected>Choose...</option>
+                    </select>
+                </div>
+                <div class="input-group mb-3">
+                    <input type="text" name="Ids" hidden value="" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                </div>
+                    <div class="input-group mb-3">
+                        <input type="date" name="deadline" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                    </div>
+            </div>
+            <div class="modal-footer">
+<!--                <button type="button" id="refuseBtn" class="btn btn-danger" data-dismiss="modal">Refuse</button>-->
+                <button type="submit" id="acceptBtn" class="btn btn-success">Send</button>
+            </div>
+        </form>
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- /#wrapper -->
+
+<!-- Bootstrap core JavaScript -->
+<!--<script src="vendor/jquery/jquery.min.js"></script>-->
+<!--<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<!-- Menu Toggle Script -->
+<script>
+    $(document).ready(() => {
+        $("#select1").change(function(){
+            var selectedEXam = $(this).children("option:selected").text();
+            var selectedExamId  = $(this).children("option:selected").val();
+            var current  = $("#exam_list").val();
+            var currentIndex =  $("#exam_listIds").val();
+            // alert(currentIndex);
+            if(current != "")
+               {
+                   if (!current.indexOf(selectedEXam)>=0)
+                   {
+                       $("#exam_list").val(current+" | "+selectedEXam);
+                       $("#exam_listIds").val(currentIndex+"|"+selectedExamId);
+                   }
+               }
+            else
+                {
+                    $("#exam_listIds").val(selectedExamId);
+                    $("#exam_list").val(selectedEXam);
+                }
+           // alert("You have selected the EXam - " + selectedEXam);
+        });
+        $("#approve").click(()=>{
+            $("input[name=Ids]").val($("#stId").val())
+            $.get("/hr/hrDashboard/listExamsV2",(data)=>{
+                console.log(data);
+                data.forEach((item) => {
+                    $('#select1').append("<option value="+item.examID+">"+ item.examTitle+" </option>");
+                })
+
+            })
+        });
+/*
+        $("#acceptBtn").click(() => {
+            var studentId = $("#stId").val();
+
+            $.getJSON("/hr/SendMail/" + studentId, (data) => {
+                console.log("In Data Retrieval  " + pressed_btn_id);
+                if (data.message == "Sent") {
+                    console.log("Its Ok");
+                    $("#" + pressed_btn_id).removeClass('btn-primary').addClass('btn-success disabled ');
+                }
+            })
+        });
+*/
+
+
+        $("#menu-toggle").click(function (e) {
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
+        });
+    var pressed_btn_id ;
+    $("a").click(function(e) {
+        pressed_btn_id = this.id;
+        var arr = pressed_btn_id.split("--");
+        pressed_btn_id = arr[0];
+        var path = arr[1];
+        path = "/CVS/"+path;
+        //alert(pressed_btn_id)
+        jQuery(document).find('#stId').val(pressed_btn_id+"|"+arr[2]);
+        jQuery(document).find('#CV').attr("src", path);
+    });
+        // jQuery('#my_modal').on('show.bs.modal', function(e) {
+        //     var bookId = jQuery(e.relatedTarget).data('book-id');
+        //     alert("sdgsgsd")
+        //     jQuery(e.currentTarget).find('#stId').val(bookId);
+        // });
+    })
+</script>
+</body>

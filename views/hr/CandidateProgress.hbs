@@ -1,0 +1,268 @@
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Dashboard</title>
+
+</head>
+
+<style>
+    body {
+        overflow-x: hidden;
+    }
+
+    #sidebar-wrapper {
+        min-height: 100vh;
+        margin-left: -15rem;
+        -webkit-transition: margin .25s ease-out;
+        -moz-transition: margin .25s ease-out;
+        -o-transition: margin .25s ease-out;
+        transition: margin .25s ease-out;
+    }
+
+    #sidebar-wrapper .sidebar-heading {
+        padding: 0.875rem 1.25rem;
+        font-size: 1.2rem;
+    }
+
+    #sidebar-wrapper .list-group {
+        width: 15rem;
+    }
+
+    #page-content-wrapper {
+        min-width: 100vw;
+    }
+
+    #wrapper.toggled #sidebar-wrapper {
+        margin-left: 0;
+    }
+
+    @media (min-width: 768px) {
+        #sidebar-wrapper {
+            margin-left: 0;
+        }
+
+        #page-content-wrapper {
+            min-width: 0;
+            width: 100%;
+        }
+
+        #wrapper.toggled #sidebar-wrapper {
+            margin-left: -15rem;
+        }
+    }
+</style>
+
+
+<body>
+
+<div class="d-flex" id="wrapper">
+
+    <!-- Sidebar -->
+    <div class="bg-light border-right" id="sidebar-wrapper">
+        <div class="sidebar-heading">HR Dashboard</div>
+        <div class="list-group list-group-flush">
+            <a href="/hr/ListApplicants" id="ListApp" class="list-group-item list-group-item-action bg-light">List Applicants</a>
+            <a href="/hr/ListApplicants" id="ListApp" class="list-group-item list-group-item-action bg-light">List Applicants</a>
+            <a href="/hr/hrDashboard/candidatesProgress" class="list-group-item list-group-item-action bg-light">Candidates Progress</a>
+            <a href="/hr/hrDashboard/listExams" class="list-group-item list-group-item-action bg-light mangeExam">Manage Exams</a>
+            <a href="/hr/createPositionForm" class="list-group-item list-group-item-action bg-light">Manage Positions</a>
+
+        </div>
+    </div>
+    <!-- /#sidebar-wrapper -->
+
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+            <button class="btn btn-primary" id="menu-toggle">Menu</button>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Log out</a>
+                    </li>
+
+                </ul>
+            </div>
+        </nav>
+        <div class="container-fluid">
+            <h1 class="mt-4">Candidate Progress</h1>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">Student</th>
+                    <th scope="col">Position</th>
+                    <th scope="col">View</th>
+                    <th scope="col">Full Test</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                {{# results}}
+                    <tr>
+                        <td>{{this.user_name}}</td>
+                        <td>{{this.positionId}}</td>
+                        <td>
+                            <a href="#my_modal" id="{{this.epid}}"
+                               class="btn btn-primary dd" data-toggle="modal" data-book-id="{{this.epid}}">Preview</a>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-primary" data-user-name="{{this.user_name}}" data-toggle="modal" data-target=".bd-example-modal-xl">View Full Test</button>
+                        </td>
+                    </tr>
+                {{/results}}
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+
+    <div class="modal fade bd-example-modal-xl" tabindex="-1" id="my_modal2" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Student Progress in Each Exam</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body hhh">
+                    <ul class="nav justify-content-around dd">
+
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="refuseBtn" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" data-dismiss="modal"
+                            data-toggle="modal" data-target="#my_modal2">OK
+                    </button>
+                    <!--                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- /#page-content-wrapper -->
+    <div class="modal fade" id="my_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Student Progress in Each Exam</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="md">
+<!--                    <input type="text" name="cc" value="">-->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="refuseBtn" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" data-dismiss="modal"
+                            data-toggle="modal" id="approve" data-target="#my_modal2">OK
+                    </button>
+                    <!--                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+<script>
+    jQuery('#my_modal2').on('show.bs.modal', function(e) {
+
+        var userName = jQuery(e.relatedTarget).data('user-name');
+        $.get("/hr/getStudentAnswer/"+userName,(data)=> {
+            var arr = '<table class="table table-striped"> <thead> <tr> <th scope="col">Question</th> ' +
+                    '<th scope="col">Answer</th></tr> </thead><tbody>';
+            console.log(data);
+            data.forEach((item)=>{
+                if(item['correct'] === 1){
+                    arr+= ' <tr bgcolor="#90ee90">' +
+                                '<td>'+item.questionBody+'</td>' +
+                                '<td>'+item.answerBody+'</td>' +
+                            '</tr>'
+                }
+                else {
+
+                    arr+= ' <tr bgcolor="#ff6347">' +
+                                '<td>'+item.questionBody+'</td>' +
+                                '<td>'+item.answerBody+'</td>' +
+                            '</tr>'
+                }
+            });
+            arr+="</tbody>" +
+                    "</table>"
+            $(".hhh").html(arr);
+        })
+    });
+
+
+
+    jQuery('#my_modal').on('show.bs.modal', function(e) {
+        var processId = jQuery(e.relatedTarget).data('book-id');
+
+        jQuery(e.currentTarget).find('input[name=cc]').val(processId);
+        $.get("/hr/getStatus/"+processId,(data)=>{
+            var arr ="";
+            var sum =0 ;
+            var tot = 0;
+            data.forEach(function (item) {
+                //arr+='<label>Exam No.' + item.examId + '</label>';
+                arr+='<div class="">Finishing Date [' + item.finishing_date + ']</div>'
+                var sc = parseInt(item.score);
+                if(sc <= 30)
+                {
+                    arr += ('<div  id="' + item.examId + '" class="progress">\n' +
+                            '      <div class="progress-bar bg-danger pp" role="progressbar" style="width:' + item.score + '%;cursor: pointer;" aria-valuenow="' + item.score + '" aria-valuemin="0" aria-valuemax="100">' + item.score + '%Exam No.' + item.examId + '</div>\n' +
+                            '</div>')
+                }
+                else if(sc>30 && sc <= 60)
+                {
+                    arr += ('<div id="' + item.examId + '" class="progress">\n' +
+                            '      <div class="progress-bar bg-warning pp" role="progressbar" style="width:' + item.score + '%;cursor: pointer;" aria-valuenow="' + item.score + '" aria-valuemin="0" aria-valuemax="100">' + item.score + '%Exam No.' + item.examId + '</div>\n' +
+                            '</div>')
+                }
+                else
+                {
+                    arr += ('<div  id="' + item.examId + '" class="progress">\n' +
+                            '      <div class="progress-bar bg-success pp" role="progressbar" style="width:' + item.score + '%;cursor: pointer;" aria-valuenow="' + item.score + '" aria-valuemin="0" aria-valuemax="100">' + item.score + '%Exam No.' + item.examId + '</div>\n' +
+                            '</div>')
+                }
+                arr+="<br>"
+                sum+=sc;
+                tot+=100;
+            });
+            sum = Math.ceil((sum/tot)*100);
+            arr+='<div class="">Total Score</div>'
+            arr += ('<div class="progress">' +
+                    '      <div class="progress-bar bg-success pp" role="progressbar" style="width:' + sum+ '%;cursor: pointer;" aria-valuenow="' + sum + '" aria-valuemin="0" aria-valuemax="100">' + sum + '%</div>\n' +
+                    '</div>');
+            $('#md').html(arr)
+        })
+
+    });
+    $("#my_modal").on('click' , 'div.pp' , ()=>{
+        alert($(this).attr('id'));
+    })
+
+    $("#menu-toggle").click(function (e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>

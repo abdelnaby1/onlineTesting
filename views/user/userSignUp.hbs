@@ -1,0 +1,141 @@
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+    var accept=0;
+    $(document).ready(() => {
+        $('#first_name').change(function() {
+            
+            var username=$('#first_name').val().split('@');
+            if(username.length>1)
+            {
+
+                $.get( "/checkUserName", { userName: username},(data,status)=>{
+                    if(data=='1')
+                        {
+                            accept=1;
+                            $('#valid').html("<h9 style='color: green;'>valid User Name</h9>")
+                            
+                        }
+                    else if(data=="0")
+                        {
+                            accept=0;
+                            $('#valid').html("<h9 style='color: red;'>UnValid User Name</h9>")
+                        }
+                } );
+            }
+
+        });
+
+    })
+    
+    function check(){
+        if(accept==0)
+            return false;
+        else
+            return true
+    }
+</script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sign Up Form by Colorlib</title>
+
+    <!-- Font Icon -->
+    <link rel="stylesheet" href="fonts/material-icon/css/material-design-iconic-font.min.css">
+    <link rel="stylesheet" href="vendor/jquery-ui/jquery-ui.min.css">
+
+    <!-- Main css -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <div class="main">
+
+        <section class="signup">
+            <!-- <img src="images/signup-bg.jpg" alt=""> -->
+            <div class="container">
+                <div class="signup-content">
+                    <form action="/signup" method="POST" onclick="return check();" id="signup-form" class="signup-form">
+                        <div class="form-group">
+                            <div class="form-group">
+                                <label for="first_name">email</label>
+                                <input type="email" class="form-input" name="first_name" id="first_name" />
+                                <label id="valid"></label>
+                            </div>
+                            
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone_number">Phone number</label>
+                            <input type="number" class="form-input" name="phone_number" id="phone_number" />
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input type="password" class="form-input" name="password" id="password"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="re_password">Repeat your password</label>
+                                <input type="password" class="form-input" name="re_password" id="re_password"/>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <input type="submit" name="submit" id="submit" class="form-submit" value="Submit"/>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- JS -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/jquery-ui/jquery-ui.min.js"></script>
+    <script src="vendor/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="vendor/jquery-validation/dist/additional-methods.min.js"></script>
+    <script src="js/main.js"></script>
+</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+</html>
+<!--
+<div class="container">
+    <div class="row">
+        <div class="card text-center col-9 col-auto ml-30" style="margin-left: 150px; margin-top: 70px;" >
+            <div class="card-body">
+                <div class="card-header">
+                    Sign Up
+                </div>
+                <form action="/signup" method="POST"onclick="return check();">
+                    <div class="form-group">
+
+                        <input type="hidden" class="form-control" placeholder="User name" name="name">
+
+                    </div>
+                    <div class="form-group">
+
+                        <input type="email" class="form-control email" aria-describedby="emailHelp" placeholder="Email address"
+                               name="email">
+                        <label id="valid"></label>
+                    </div>
+                    <div class="form-group">
+
+                        <input type="password" class="form-control" placeholder="password" name="password">
+                    </div>
+                    <div class="form-group">
+
+                        <input type="text" class="form-control" aria-describedby="emailHelp" placeholder="Phone number"
+                               name="phone">
+                    </div>
+
+            <button type="submit" class="btn btn-primary c">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+-->

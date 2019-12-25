@@ -1,0 +1,197 @@
+<div id="am">
+    <html class="supernova">
+
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+
+
+
+        <title>Sample Scholarship Application Form </title>
+        <link href="https://cdn.jotfor.ms/static/formCss.css?3.3.14458" rel="stylesheet" type="text/css" />
+        <link type="text/css" rel="stylesheet" href="https://cdn.jotfor.ms/css/styles/nova.css?3.3.14458" />
+        <link type="text/css" media="print" rel="stylesheet" href="https://cdn.jotfor.ms/css/printForm.css?3.3.14458" />
+        <link type="text/css" rel="stylesheet"
+            href="https://cdn.jotfor.ms/themes/CSS/57b03d408265f156908b4567.css?themeRevisionID=57b145e79a11c73af38b4567" />
+
+    </head>
+
+    <body style="margin-left: 300px;">
+        <input type="hidden" name="formID" value="193467017548567" />
+        <input type="hidden" id="JWTContainer" value="" />
+        <input type="hidden" id="cardinalOrderNumber" value="" />
+        <div role="main" class="form-all">
+
+            <div class="progress" id="submit_progress" style="width:100%">
+                <div class="progress-bar bg-danger " role="progressbar" aria-valuenow="0" aria-valuemin="0"
+                    aria-valuemax="100" id="load" style="width:0%">
+                    0%
+                </div>
+            </div>
+
+
+            <ul class="form-section page-section">
+                <li id="cid_120" class="form-input-wide" data-type="control_head">
+                    <div class="form-header-group ">
+                        <div class="header-text httal htvam">
+                            <h1 id="header_120" class="form-header" data-component="header">
+                                {{examTitle}}
+                            </h1>
+                            <div id="subHeader_120" class="form-subHeader">
+                                Task Deadline - {{deadline}}
+                            </div>
+                            <div id="subHeader_120" class="form-subHeader">
+                                exam Deadline -{{duration}}
+                            </div>
+                        </div>
+                    </div>
+                </li>
+
+
+
+                <li class="form-line" data-type="control_radio" id="id_31">
+                    <label class="form-label form-label-top q1" id="label_31" for="input_31"> </label>
+                    <div id="cid_31" class="form-input-wide">
+                        <div class="form-single-column A1" role="group" aria-labelledby="label_31"
+                            data-component="radio">
+
+
+                        </div>
+                    </div>
+                </li>
+
+
+    </body>
+
+    </html>
+    <script type="text/javascript">JotForm.ownerView = true;</script>
+
+
+
+
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+    <script>
+        function shuffle(array) { // rondom of answers ansmers
+            var currentIndex = array.length, temporaryValue, randomIndex;
+            while (0 !== currentIndex) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex -= 1;
+                temporaryValue = array[currentIndex];
+                array[currentIndex] = array[randomIndex];
+                array[randomIndex] = temporaryValue;
+            }
+            return array;
+        }
+        function tryParseJSON(jsonString) {
+            try {
+                var o = JSON.parse(jsonString);
+                if (o && typeof o === "object") {
+                    return o;
+                }
+            }
+            catch (e) { }
+            return null;
+        }
+        var decodeJSON = function (obj) {
+            obj = decodeURI(obj);
+            return tryParseJSON(obj);
+        };
+        var finishDate = new Date().toJSON().slice(0,10).replace(/-/g,'/');
+        var data = decodeJSON("{{result}}");//الاسئله والاجابات الصح والغلط
+        var duration = "{{duration}}"
+        var score = 0,skiped=0;
+        $(document).on('click', 'input', function () {
+            if ($(this).attr('id') == 'input_') {
+                alert('correct');
+                score += 1;
+            }
+            else if ($(this).attr('id') == 'skip')
+                {
+                    alert('skiped')
+                    skiped+=1;
+                }
+            else
+                alert('incorrect')
+            $.get('/SaveAnswer', { 'questioBody': $('.q1').html(), 'answerBody': $(this).val(), 'correct': ($(this).attr('id') == 'input_') ? '1' : '0', 'examTitle': '{{examTitle}}', 'CondUserName': '{{CondUserName}}' }, null)
+            $('.startExam').click()
+        })
+        $(document).ready(() => {
+            $('#pay').hide() //عشان يشغل التايمر 
+            $('.skip').hide()//عشان يعمل سكيب للسؤال
+            $('#pay').click(function () {
+                var timerId, percent;
+                // reset progress bar
+                percent = 0;
+                $('#pay').attr('disabled', true);
+                $('#load').css('width', '0px');
+                $('#load').addClass('progress-bar-striped active');
+                timerId = setInterval(function () {
+                    // increment progress bar
+                    percent += 1;
+                    $('#load').css('width', percent + '%');
+                    $('#load').html(percent + '%');
+                    // complete
+                    if (percent >= 100) {
+                        clearInterval(timerId);
+                        $('#pay').attr('disabled', false);
+                        $('#load').removeClass('progress-bar-striped active');
+                        $('#load').html('payment complete');
+                        alert("done2")
+                        var url = '/profile';
+                        var myWindow = window.open(url, "_self", "width=1200, height=600,scrollbars=yes,status=yes,location = yes");
+                    }
+                }, duration * 1000);
+            });
+            var Befor = '';
+            Befor += '<span class="form-radio-item" style="clear:left">'
+            Befor += '<span class="dragger-item">'
+            Befor += '</span>'
+            var end = '</span>'
+            $('.startExam').click(function () {
+                $('.startExam').hide()
+                $('.skip').show()
+                if (data[0].length == 5)
+                    $('#pay').click()
+                if (data[0].length == 0) {
+                    $.get('/SaveScore', { 'score': score, 'ProcessID': '{{ProcessID}}', 'examID': '{{examID}}','finishDate':finishDate }, null)
+                    alert("Correct answer =" + score)
+                    alert("Wrong answer =" + (5-score))
+                    alert("skiped question =" + skiped)
+                    var url = '/profile';
+                    var myWindow = window.open(url, "_self", "width=1200, height=600,scrollbars=yes,status=yes,location = yes");
+                }
+                
+                $('.q1').html(data[0][0].questionBody)
+                console.log(data)
+                console.log(data[0].splice(0, 1));
+                var arr = Befor;
+                arr += '<input type="radio" class="form-radio" id="input_" name="c' + data[1][0][0].qid + '"value="' + data[1][0][0].AnswerBody + '" />'
+                arr += '<label for="input_" >' + data[1][0][0].AnswerBody + '</label>'
+                arr += end;
+                console.log(data[1].splice(0, 1));
+                var Answer = [];
+                Answer.push(arr);
+                for (var z = 0; z < 3; z++) {
+                    var arr2 = Befor;
+                    arr2 += '<input type="radio"id="input_' + z + '"   name="c' + data[2][0][z].qid + '"value="' + data[2][0][z].AnswerBody + '" />'
+                    arr2 += '<label for="input_' + z + '" >' + data[2][0][z].AnswerBody + '</label>'
+                    arr2 += end;
+                    Answer.push(arr2);
+                }
+                console.log(data[2].splice(0, 1));
+                Answer = shuffle(Answer);
+                $('.A1').html(Answer)
+            })
+        })
+    </script>
+    <button type="button" class="btn btn-lg btn-primary startExam">Start Exam</button>
+    <input type="button" class="btn btn-lg btn-primary skip" id="skip" value="skip">
+    <button type="button" id="pay" class="btn btn-primary" autocomplete="off" style="width:8em">
+        Pay
+    </button>
+</div>
